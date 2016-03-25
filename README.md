@@ -1,12 +1,15 @@
-## React Hot Loader + Browser-sync
+### React Hot Loader + Browsersync
 
-[React Hot Loader](https://gaearon.github.io/react-hot-loader/getstarted/) を使えば、エディタを保存した時点で、React コンポーネントの変更が検知されます。さらに、React Hot Loader はHotModuleReplacementPlugin(HMR) を使用しているため、更新時にページの全読み込みが発生せず、state が保持されたまま React コンポーネントの変更した箇所のみが部分更新されるため、いちいち手動でブラウザをリロードする手間が省けます。
 
-通常はデベロップメントサーバーに webpack-dev-server を使うことで、このホットリローディング機能を使うことができるのですが、今回は [Browsersync](https://www.browsersync.io/) を使って、クロスブラウジングとさらなるホットリローディングの強化を目指します。
+**[React Hot Loader](https://gaearon.github.io/react-hot-loader/getstarted/)** を使えば、エディタを保存した時点で、React コンポーネントの変更が検知され、ブラウザの更新が自動で行われます。さらに、**React Hot Loader** はHotModuleReplacementPlugin(**HMR**) を使用しているため、更新時にページの全読み込みが発生せず、state が保持されたまま React コンポーネントの変更した箇所のみが部分更新されるため、いちいち手動でブラウザをリロードする手間が省けることに加え、チェック毎に state を変える必要がなくなります。
+
+
+通常はデベロップメントサーバーに **webpack-dev-server** を使うことで、このホットリローディング機能を使うことができるのですが、今回は **[Browsersync](https://www.browsersync.io/)** を使って、クロスブラウジングとさらなるホットリローディングの強化を目指します。
+
 
 まずは必要な物をインストールします。`package.json` は次のようになります。
 
-```json
+```javascript
 "dependencies": {
   "react": "^0.13.3",
   "react-dom": "^0.14.7"
@@ -22,9 +25,9 @@
 }
 ```
 
-通常の React Hot Loader に必要なライブラリに加えて Browsersync と `webpack-hot-middleware` と `webpack-dev-middleware` の ふたつのミドルウェアをインストールしておきます。webpack のホットリローディングは `webpack-dev-middleware` がファイル変更イベントを検知して `webpack-dev-server` に送信することで可能になりますが、 `webpack-hot-middleware` を合わせて使うことで、その他のデベロップメントサーバーにイベントを送信して、自動でブラウザをリロードさせることができます。
+通常の **React Hot Loader** に必要なライブラリに加えて **Browsersync** と `webpack-hot-middleware` と `webpack-dev-middleware` の ふたつのミドルウェアをインストールしておきます。**webpack** のホットリローディングは `webpack-dev-middleware` がファイル変更イベントを検知して `webpack-dev-server` に送信することで可能になりますが、 `webpack-hot-middleware` を合わせて使うことで、その他のデベロップメントサーバーにイベントを送信して、自動でブラウザをリロードさせることができます。
 
-## webpack config
+# webpack config
 
 プロジェクトファイルの構成:
 ```
@@ -37,9 +40,10 @@
 |___webpack.config.js
 ```
 
+
 まずは `webpack.config.js` を編集します。
 
-下記は React Hot Loader での `webpack.config.js` です。
+下記は **React Hot Loader** での `webpack.config.js` です。
 
 ```javascript
 // React Hot Loader
@@ -74,7 +78,7 @@ module.exports = {
 };
 ```
 
-1. プラグインを2つ加えます。
+ここに、プラグインを2つ加えます。
 
 ```javascript
 plugins: [
@@ -87,7 +91,7 @@ plugins: [
 ]
 ```
 
-2. `webpack-hot-middleware/client` をエントリーポイントに設定する。
+また、`webpack-hot-middleware/client` をエントリーポイントに設定します。
 
 したがって、`webpack.config.js` ファイルは次のようになります。
 
@@ -125,7 +129,7 @@ module.exports = {
 };
 ```
 
-## Browsersync
+### Browsersync
 
 サーバーに、ミドルウェアを加えます。`server.js` ファイルは次のようになります。
 
@@ -164,10 +168,10 @@ browserSync({
 ```
 
 - `baseDir`: サーバーのベースとなるディレクトリ。
-- `middleware`: ミドルウェア。devMiddlewareではpublicPathの指定が必須。
-- `files`: Browsersyncが変更を監視するファイル群。変更がなされると、ページ全体を読み込む。
+- `middleware`: 使用するミドルウェア。`devMiddleware`では`publicPath`の指定が必須となります。
+- `files`: **Browsersync** が変更を監視するファイル群。変更がなされると、ページ全体をリロードします。`js` ファイル群の監視は **webpack** に任せるので、ここに記述する必要はありません。
 
-## クロスブラウジング
+### クロスブラウジング
 
 次のコマンドで、サーバーが立ち上がります。
 
@@ -175,9 +179,10 @@ browserSync({
 node server.js
 ```
 
-同時に、次のようなURLが表示されます。
+同時に、次のような URL が表示されます。
 
 ```
+
 [BS] Access URLs:
  ------------------------------------
        Local: http://localhost:3000
@@ -186,6 +191,9 @@ node server.js
           UI: http://localhost:3001
  UI External: http://{PCのIPアドレス}:3001
  ------------------------------------
- ```
 
- このURLに繋げばで、同じネットワークに接続している他のデバイスからも、ブラウジングすることができます。
+```
+
+
+この URL に繋げば、同じネットワークに接続している他のデバイスからも、ブラウジングすることができます。
+モバイルデバイスからの UI や UX のチェックに便利です。
